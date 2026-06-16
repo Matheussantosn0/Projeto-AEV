@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Acompanhe a agenda escolar dos seus filhos - Agenda Escolar Virtual">
+    <title>Agenda dos Filhos | Responsável - AEV</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" th:href="@{/css/calendario-responsavel.css}">
+</head>
+<body>
+
+    <!-- ========== SKIP LINK (Acessibilidade) ========== -->
+    <a th:href="@{/#main-content}" class="skip-link">Pular para o conteúdo principal</a>
+
+    <!-- ========== CABEÇALHO ========== -->
+    <header class="header" role="banner">
+        <div class="header-left">
+            <div class="logo" aria-label="Logo Agenda Escolar Virtual">
+                <img th:src="@{/img/ImagemDeLogoDaAEV.png}" alt="AEV" width="40" height="40">
+            </div>
+            <div class="search-bar" role="search">
+                <label for="searchInput" class="sr-only">Buscar atividades e eventos</label>
+                <input 
+                    type="search" 
+                    id="searchInput" 
+                    placeholder="🔍 Buscar por atividades e eventos..."
+                    aria-label="Buscar atividades e eventos dos filhos"
+                >
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <nav class="header-nav" aria-label="Navegação principal">
+                <button class="nav-btn active" aria-current="page" aria-label="Ver calendário">
+                    <span class="icon" aria-hidden="true">📅</span>
+                    <span>Calendário</span>
+                </button>
+                <button class="nav-btn" aria-label="Ver boletim">
+                    <span class="icon" aria-hidden="true">📝</span>
+                    <a th:href="@{/boletim-responsavel}"><span>Boletim</span></a>
+                </button>
+                <button class="nav-btn" aria-label="Ver avaliações">
+                    <span class="icon" aria-hidden="true">📋</span>
+                    <a th:href="@{/avaliacoes-responsavel}"><span>Avaliações</span></a>
+                </button>
+            </nav>
+            
+            <div class="user-profile" aria-label="Perfil do usuário">
+                <div class="avatar" aria-hidden="true">👨‍👩‍👧‍👦</div>
+                <div class="user-info">
+                    <span class="user-name" id="responsavelName">Carregando...</span>
+                    <span class="user-role">Responsável</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ========== CONTEÚDO PRINCIPAL ========== -->
+    <div class="main-container">
+        
+        <!-- Sidebar: Desempenho dos Filhos (Visualização) -->
+        <aside class="sidebar" id="sidebar" aria-label="Desempenho dos filhos">
+            <div class="sidebar-header">
+                <button class="arrow-btn" id="scrollUp" aria-label="Rolar para cima">▲</button>
+                <h3>📊 Desempenho</h3>
+                <button class="arrow-btn" id="scrollDown" aria-label="Rolar para baixo">▼</button>
+            </div>
+
+            <div class="activities-list" id="activitiesList" role="list">
+                <!-- Atividades/Desempenho injetados via JavaScript -->
+            </div>
+        </aside>
+
+        <!-- Calendário Principal (Visualização) -->
+        <main id="main-content" class="calendar-container" role="main">
+            <div class="calendar-controls">
+                <button class="nav-month-btn" id="prevMonth" aria-label="Mês anterior">◀ Anterior</button>
+                <h2 id="currentYearMonth" class="year-month-display" aria-live="polite"></h2>
+                <button class="nav-month-btn" id="nextMonth" aria-label="Próximo mês">Próximo ▶</button>
+            </div>
+
+            <div class="calendar-grid" id="calendarGrid" role="grid" aria-label="Calendário mensal">
+                <!-- Gerado via JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <!-- ========== MODAL: DETALHES DO DIA (Visualização) ========== -->
+    <div id="dayModal" class="modal" role="dialog" aria-labelledby="modalDate" aria-modal="true" hidden>
+        <div class="modal-content">
+            <button type="button" class="close" onclick="fecharModal()" aria-label="Fechar modal">&times;</button>
+            <h2 id="modalDate"></h2>
+            
+            <div class="modal-body">
+                <!-- Seção: Eventos do Dia -->
+                <section class="event-section" aria-labelledby="events-title">
+                    <h3 id="events-title">📌 Eventos Escolares</h3>
+                    <div id="eventsList" role="list">
+                        <p class="no-events">Nenhum evento para este dia.</p>
+                    </div>
+                </section>
+
+                <!-- Seção: Atividades dos Filhos -->
+                <section class="event-section" aria-labelledby="atividades-title">
+                    <h3 id="atividades-title">📚 Atividades dos Filhos</h3>
+                    <div id="atividadesList" role="list">
+                        <p class="no-events">Nenhuma atividade para este dia.</p>
+                    </div>
+                </section>
+
+                <!-- Info: Somente Visualização -->
+                <section class="info-section" aria-labelledby="info-title">
+                    <h3 id="info-title" class="sr-only">Informação</h3>
+                    <p class="view-only-notice">
+                        ℹ️ <strong>Modo visualização:</strong> Como responsável, você pode acompanhar 
+                        a agenda dos seus filhos. Para alterar eventos, entre em contato com a escola.
+                    </p>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== TOAST DE NOTIFICAÇÃO ========== -->
+    <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true"></div>
+
+    <!-- ========== SCRIPT PRINCIPAL ========== -->
+    <script th:src="@{/js/calendario-responsavel.js}"></script>
+
+</body>
+</html>
