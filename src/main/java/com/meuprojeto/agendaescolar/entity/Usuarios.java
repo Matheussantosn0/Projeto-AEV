@@ -30,6 +30,8 @@ public class Usuarios {
     private String senha;
     @Column(name = "telefone", nullable = true)
     private String telefone;
+    @Column(name = "email_verificado")
+    private Boolean emailVerificado = false;
 
 
         public Usuarios() {} //construtor vazio para o JPA
@@ -41,6 +43,7 @@ public class Usuarios {
                 this.salt = salt;
                 this.senha = senha;
                 this.telefone = telefone;
+                this.emailVerificado = false;
             }
 
     // Getters e Setters
@@ -64,6 +67,12 @@ public class Usuarios {
 
     public String getTelefone() { return telefone; }
     public void setTelefone(String telefone) { this.telefone = telefone; }
-}
 
-    
+    public Boolean getEmailVerificado() {
+    return emailVerificado;
+    }
+
+    public void setEmailVerificado(Boolean emailVerificado) {
+    this.emailVerificado = emailVerificado;
+    }
+}

@@ -351,7 +351,7 @@ textarea:focus {
     display: inline-block;
     padding: 0.25rem 0.7rem;
     background: var(--color-success-light);
-    color: var(--color-success-text);
+    color: var(--color-success-);
     border-radius: 20px;
     font-size: 0.8rem;
     font-weight: 600;
@@ -451,7 +451,7 @@ textarea:focus {
 
 .verification-status.verified {
     background: var(--color-success-light);
-    color: var(--color-success-text);
+    color: var(--color-success-);
 }
 
 .verification-status.pending {

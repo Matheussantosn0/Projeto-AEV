@@ -49,13 +49,12 @@
             <h2 id="perfil-title" class="section-title">👤 Meu Perfil</h2>
             
             <div class="profile-card">
-                <div class="profile-avatar" id="profile-avatar" aria-label="Avatar do usuário">MS</div>
-                    <span th:text="${#strings.substring(usuario.nomeCompleto,0,1)}">M</span>
+                <div class="profile-avatar" id="profile-avatar" aria-label="Avatar do usuário"></div>
                 <div class="profile-info">
                     <h3 id="profile-name" th:text="${usuario.nomeCompleto}">Nome do Usuário</h3>
                     <p>📧 <span id="profile-email" th:text="${usuario.email}">email@exemplo.com</span></p>
                     <p>📱 <span id="profile-phone" th:text="${usuario.telefone}">(00) 00000-0000</span></p>
-                    <span class="profile-badge" role="status">✓ Conta Verificada</span>
+                    <!-- <span class="profile-badge" role="status">✓ Conta Verificada</span> -->
                 </div>
             </div>
         </section>
@@ -148,10 +147,10 @@
                     <span class="error" id="error-novo-email">Digite um e-mail válido</span>
                 </div>
                 
-                <div id="status-email" class="verification-status verified" role="status" aria-live="polite">
+               <!--<div id="status-email" class="verification-status verified" role="status" aria-live="polite">
                     <span class="dot" aria-hidden="true"></span>
                     <span>E-mail atual verificado ✓</span>
-                </div>
+                </div>-->
 
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" onclick="document.getElementById('form-email').reset()">
@@ -168,35 +167,35 @@
         <section class="section phone-section" aria-labelledby="telefone-title">
             <h2 id="telefone-title" class="section-title">📱 Número de Telefone</h2>
             
-            <form id="form-telefone" onsubmit="return solicitarVerificacaoTelefone(event)" novalidate>
+            <form id="form-telefone" method="post" th:action="@{/agendaescolar/api/usuario/telefone}">
                 <div class="form-group">
-                    <label for="novo-telefone">Número para WhatsApp/SMS <span aria-hidden="true">*</span></label>
+                    <label for="novo-telefone">Informe seu número de telefone <span aria-hidden="true">*</span></label>
                     <input 
                         type="tel" 
                         id="novo-telefone" 
-                        name="novo-telefone"
+                        name="telefone"
                         required 
-                        placeholder="+55 (11) 99999-9999"
+                        placeholder="(11) 99999-9999"
                         th:value="${usuario.telefone}"
                         autocomplete="tel"
                         aria-required="true"
-                        pattern="\+55\s?\(\d{2}\)\s?9?\d{4}-?\d{4}"
+                        pattern="(\d{2}\)\s?9?\d{4}-?\d{4}"
                     >
-                    <span class="hint">Formato: +55 (DD) 99999-9999 • Usado para recuperação de conta</span>
+                    <span class="hint">Formato:(DD) 99999-9999 • Usado para recuperação de conta</span>
                     <span class="error" id="error-novo-telefone">Digite um número válido</span>
                 </div>
                 
-                <div id="status-telefone" class="verification-status verified" role="status" aria-live="polite">
+              <!--<div id="status-telefone" class="verification-status verified" role="status" aria-live="polite">
                     <span class="dot" aria-hidden="true"></span>
                     <span>Telefone verificado ✓</span>
-                </div>
+                </div> -->
 
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" onclick="document.getElementById('form-telefone').reset()">
                         Cancelar
                     </button>
                     <button type="submit" class="btn btn-primary" id="btn-telefone">
-                        📲 Enviar Código SMS
+                        Salvar Telefone
                     </button>
                 </div>
             </form>
@@ -302,7 +301,7 @@
             <h3 id="modal-telefone-title">📱 Verificar Novo Telefone</h3>
             <p style="text-align: center; margin-bottom: 1rem;">
                 Enviamos um SMS para:<br>
-                <strong id="modal-telefone-destino">+55 (11) 99999-9999</strong>
+                <strong id="modal-telefone-destino">(11) 99999-9999</strong>
             </p>
             
             <form id="form-codigo-telefone" onsubmit="return confirmarVerificacaoTelefone(event)">

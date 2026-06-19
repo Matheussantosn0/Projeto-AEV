@@ -17,7 +17,7 @@ public class AlunoController {
         @GetMapping("/pagina-do-aluno")
         public String paginaAluno(HttpSession session) {
             
-            Usuarios usuario = (Usuarios) session.getAttribute("usuariologado");
+            Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
 
                 if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.ALUNO) {
                     return "redirect:/login"; // redireciona para a página de login com um parâmetro de erro
@@ -29,7 +29,7 @@ public class AlunoController {
         @GetMapping("/minha-agenda-aluno")
         public String calendarioAluno(HttpSession session) {
 
-            Usuarios usuario = (Usuarios) session.getAttribute("usuariologado");
+            Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
 
             if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.ALUNO) {
                 return "redirect:/login";
@@ -40,7 +40,7 @@ public class AlunoController {
         @GetMapping("/minhas-atividades")
         public String atividadesAluno(HttpSession session) {
 
-            Usuarios usuario = (Usuarios) session.getAttribute("usuariologado");
+            Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
 
             if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.ALUNO) {
                 return "redirect:/login";
@@ -51,7 +51,7 @@ public class AlunoController {
         @GetMapping("/meus-boletins")
         public String boletimAluno(HttpSession session) {
 
-            Usuarios usuario = (Usuarios) session.getAttribute("usuariologado");
+            Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
 
             if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.ALUNO) {
                 return "redirect:/login";

@@ -1,12 +1,14 @@
 package com.meuprojeto.agendaescolar.service;
 
 import org.springframework.stereotype.Service;
+import org.hibernate.annotations.Nationalized;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.meuprojeto.agendaescolar.repository.UsuariosRepository;
 import com.meuprojeto.agendaescolar.entity.Usuarios;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
 
 
 @Service //classe de serviço, onde ficam as regras de negócio
@@ -30,6 +32,12 @@ public class UserService {
 
     public Usuarios buscarPorEmail(String email) { //método para buscar um usuário pelo email, recebe o email como parâmetro
         return userRepository.findByEmail(email).orElse(null); //chama o método do repositório para buscar o usuário pelo email, se não encontrar retorna null
+    }
+
+    public Usuarios atualizarTelefone(UUID idUsuario, String telefone) { //método para atualizar o telefone de um usuário, recebe o id do usuário e o novo telefone como parâmetros
+        Usuarios usuario = userRepository.findById(idUsuario). orElseThrow(() -> new RuntimeException("Usuário não encontrado")); //busca o usuário pelo id, se não encontrar lança uma exceção
+        usuario.setTelefone(telefone); //atualiza o telefone do usuário
+        return userRepository.save(usuario); //salva as alterações no repositório
     }
 
     public Usuarios autenticarUsuario(String email, String senha) { //método para autenticar um usuário, recebe o email e a senha como parâmetros

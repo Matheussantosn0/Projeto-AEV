@@ -15,7 +15,7 @@ public class ProfessorController {
     @GetMapping("/pagina-do-professor")
     public String paginaProfessor(HttpSession session) {
 
-        Usuarios usuario = (Usuarios) session.getAttribute("usuariologado");
+        Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
 
         if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.PROFESSOR) {
             return "redirect:/login"; // redireciona para a página de login com um parâmetro de erro
@@ -27,7 +27,7 @@ public class ProfessorController {
     @GetMapping("/minha-agenda-professor")
     public String calendarioProfessor(HttpSession session) {
 
-        Usuarios usuario = (Usuarios) session.getAttribute("usuariologado");
+        Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
 
         if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.PROFESSOR) {
             return "redirect:/login"; // redireciona para a página de login com um parâmetro de erro
@@ -39,7 +39,7 @@ public class ProfessorController {
     @GetMapping("/enviar-atividades")
     public String atividadesProfessor(HttpSession session) {
 
-        Usuarios usuario = (Usuarios) session.getAttribute("usuariologado");
+        Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
 
         if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.PROFESSOR) {
             return "redirect:/login"; // redireciona para a página de login com um parâmetro de erro
@@ -50,7 +50,7 @@ public class ProfessorController {
     @GetMapping("/lançar-boletins")
     public String boletimProfessor(HttpSession session) {
 
-        Usuarios usuario = (Usuarios) session.getAttribute("usuariologado");
+        Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
 
         if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.PROFESSOR) {
             return "redirect:/login"; // redireciona para a página de login com um parâmetro de erro

@@ -58,14 +58,14 @@ public class EscolaController {
             return "gerenciar-turmas";
         }
 
-        @GetMapping("/configurar perfil")
+        @GetMapping("/configurar-perfil")
         public String configurarPerfil(HttpSession session, Model model) {
             Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
 
             if (usuario == null) {
                 return "redirect:/login";
             }
-            model.addAttribute("usuario", usuario);
+           model.addAttribute("usuario", usuario);
 
             return "configuracao-perfil";
         }

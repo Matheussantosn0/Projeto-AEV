@@ -16,7 +16,7 @@ public class ResponsavelController {
         @GetMapping("/pagina-do-responsavel")
         public String paginaResponsavel(HttpSession session) {
 
-                Usuarios usuario = (Usuarios) session.getAttribute("usuariologado");
+                Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
 
                 if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.RESPONSAVEL) {
                     return "redirect:/login"; // redireciona para a página de login com um parâmetro de erro
@@ -28,7 +28,7 @@ public class ResponsavelController {
         @GetMapping("/agenda-do-aluno")
         public String calendarioResponsavel(HttpSession session) {
 
-                  Usuarios usuario = (Usuarios) session.getAttribute("usuariologado");
+                  Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
 
                 if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.RESPONSAVEL) {
                     return "redirect:/login"; // redireciona para a página de login com um parâmetro de erro
@@ -40,7 +40,7 @@ public class ResponsavelController {
         @GetMapping("/desempenho-do-aluno")
         public String avaliacoesResponsavel(HttpSession session) {
 
-                 Usuarios usuario = (Usuarios) session.getAttribute("usuariologado");
+                 Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
 
                 if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.RESPONSAVEL) {
                     return "redirect:/login"; // redireciona para a página de login com um parâmetro de erro
@@ -51,7 +51,7 @@ public class ResponsavelController {
 
         @GetMapping("/boletins-do-aluno")
         public String boletimResponsavel(HttpSession session) {
-            Usuarios usuario = (Usuarios) session.getAttribute("usuariologado");
+            Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
 
             if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.RESPONSAVEL) {
                 return "redirect:/login"; // redireciona para a página de login com um parâmetro de erro

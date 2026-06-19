@@ -6,14 +6,34 @@
 'use strict';
 
 // ========== DADOS DO USUÁRIO (Simulação - Substituir por API) ==========
-const usuario = {
-    nome: 'Maria Silva',
-    email: 'maria.silva@email.com',
-    emailVerificado: true,
-    telefone: '+55 (11) 99999-9999',
-    telefoneVerificado: true,
-    avatar: 'MS'
-};
+let usuario = {}; // Será preenchido na inicialização
+
+fetch('/agendaescolar/api/usuario')
+    .then(response => response.json())
+    .then(data => {
+        usuario = {
+            nome: data.nomeCompleto,
+            email: data.email,
+            telefone: data.telefone,
+            emailVerificado: data.emailVerificado,
+            telefoneVerificado: data.telefoneVerificado,
+            avatar: gerarIniciais(data.nomeCompleto)
+        };
+
+    })
+    .catch(error => {
+        console.error("Erro ao carregar dados do usuário:", error);
+    });
+
+
+function gerarIniciais(nomeCompleto) {
+    const nomes = nomeCompleto.trim().split(" ");
+
+    if (nomes.length >= 2) {
+        return nomes[0][0].toUpperCase() + nomes[nomes.length - 1][0].toUpperCase();
+    }
+    return nomes[0][0].toUpperCase();
+}
 
 // ========== VARIÁVEIS DE CONTROLE ==========
 let codigoEmail = null;
@@ -22,7 +42,6 @@ let timers = { email: null, telefone: null };
 
 // ========== INICIALIZAÇÃO ==========
 document.addEventListener('DOMContentLoaded', () => {
-    inicializarPerfil();
     configurarMascaraTelefone();
     configurarInputsCodigo();
     configurarFechamentoModais();
@@ -31,38 +50,73 @@ document.addEventListener('DOMContentLoaded', () => {
 /**
  * Preenche os dados do perfil na interface
  */
-function inicializarPerfil() {
-    const elementos = {
-        nome: document.getElementById('profile-name'),
-        email: document.getElementById('profile-email'),
-        phone: document.getElementById('profile-phone'),
-        avatar: document.getElementById('profile-avatar')
-    };
+fetch('/agendaescolar/api/usuario')
+    .then(response => response.json())
+    .then(usuario => {
+        console.log(usuario);
+        document.getElementById('profile-name').textContent = usuario.nomeCompleto;
+        document.getElementById('profile-email').textContent = usuario.email;
+        document.getElementById('profile-phone').textContent = usuario.telefone;
 
-    if (elementos.nome) elementos.nome.textContent = usuario.nome;
-    if (elementos.email) elementos.email.textContent = usuario.email;
-    if (elementos.phone) elementos.phone.textContent = usuario.telefone;
-    if (elementos.avatar) elementos.avatar.textContent = usuario.avatar;
-}
+        // Gera as iniciais do avatar
+        const nomes = usuario.nomeCompleto.split(" ");
+        const iniciais = nomes[0].charAt(0) +
+            (nomes.length > 1 ? nomes[nomes.length - 1].charAt(0) : "");
+
+        document.getElementById('profile-avatar').textContent = iniciais.toUpperCase();
+        const statusEmail = document.getElementById('status-email');
+        if (statusEmail) {
+            statusEmail.innerHTML = usuario.emailVerificado
+                ? '<span class="dot"></span><span>E-mail atual verificado ✓</span>'
+                : '<span class="dot"></span><span>E-mail não verificado</span>';
+        }
+
+        const statusTelefone = document.getElementById('status-telefone');
+        if (statusTelefone) {
+            statusTelefone.innerHTML = usuario.telefoneVerificado
+                ? '<span class="dot"></span><span>Telefone verificado ✓</span>'
+                : '<span class="dot"></span><span>Telefone não verificado</span>';
+        }
+    })
+    .catch(error => {
+        console.error("Erro ao carregar usuário:", error);
+    });
+
+//function inicializarPerfil() {
+//    const elementos = {
+//        nome: document.getElementById('profile-name'),
+//        email: document.getElementById('profile-email'),
+//        phone: document.getElementById('profile-phone'),
+//        avatar: document.getElementById('profile-avatar')
+//    };
+//
+//    if (elementos.nome) elementos.nome.textContent = usuario.nome;
+//    if (elementos.email) elementos.email.textContent = usuario.email;
+//    if (elementos.phone) elementos.phone.textContent = usuario.telefone;
+//    if (elementos.avatar) elementos.avatar.textContent = usuario.avatar;
+//}
 
 // ========== MÁSCARA DE TELEFONE ==========
 function configurarMascaraTelefone() {
     const input = document.getElementById('novo-telefone');
     if (!input) return;
 
-    input.addEventListener('input', function(e) {
+    input.addEventListener('input', function (e) {
         let value = e.target.value.replace(/\D/g, '');
-        if (value.length > 11) value = value.slice(0, 11);
-        
-        if (value.length > 10) {
-            value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '+55 ($1) $2-$3');
-        } else if (value.length > 6) {
-            value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '+55 ($1) $2-$3');
-        } else if (value.length > 2) {
-            value = value.replace(/^(\d{2})(\d{0,5})/, '+55 ($1) $2');
-        } else if (value.length > 0) {
-            value = value.replace(/^(\d*)/, '+55 $1');
+        if (value.length > 11) {
+            value = value.substring(0, 11);
         }
+
+        console.log("Digitado:", value);
+
+        if (value.length > 6) {
+            value = value.replace(/^(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+        } else if (value.length > 2) {
+            value = value.replace(/^(\d{2})(\d+)/, '($1) $2');
+        } else if (value.length > 0) {
+            value = value.replace(/^(\d+)/, '($1');
+        }
+
         e.target.value = value;
     });
 }
@@ -89,11 +143,11 @@ function configurarInputsCodigo() {
             e.preventDefault();
             const paste = (e.clipboardData || window.clipboardData).getData('text');
             const digits = paste.replace(/\D/g, '').slice(0, 6);
-            
+
             digits.split('').forEach((digit, i) => {
                 if (inputs[i]) inputs[i].value = digit;
             });
-            
+
             if (digits.length === 6) inputs[5].focus();
         });
     });
@@ -112,7 +166,7 @@ function obterCodigoVerificacao() {
 // ========== ALTERAR SENHA ==========
 function salvarSenha(e) {
     e.preventDefault();
-    
+
     const campos = {
         atual: document.getElementById('senha-atual'),
         nova: document.getElementById('senha-nova'),
@@ -156,7 +210,7 @@ function salvarSenha(e) {
 function limparSenha() {
     const form = document.getElementById('form-senha');
     if (form) form.reset();
-    
+
     document.querySelectorAll('#form-senha .form-group').forEach(group => {
         group.classList.remove('error');
     });
@@ -165,7 +219,7 @@ function limparSenha() {
 // ========== VERIFICAÇÃO DE E-MAIL ==========
 function solicitarVerificacaoEmail(e) {
     e.preventDefault();
-    
+
     const input = document.getElementById('novo-email');
     const email = input.value;
 
@@ -182,7 +236,7 @@ function solicitarVerificacaoEmail(e) {
     // Atualizar modal e exibir
     const destino = document.getElementById('modal-email-destino');
     if (destino) destino.textContent = email;
-    
+
     const modal = document.getElementById('modal-verificar-email');
     if (modal) {
         modal.hidden = false;
@@ -197,12 +251,12 @@ function solicitarVerificacaoEmail(e) {
 
 function confirmarVerificacaoEmail(e) {
     if (e) e.preventDefault();
-    
+
     const codigo = obterCodigoVerificacao();
-    
+
     if (codigo === codigoEmail) {
         const novoEmail = document.getElementById('novo-email').value;
-        
+
         // Atualizar dados
         usuario.email = novoEmail;
         usuario.emailVerificado = true;
@@ -210,11 +264,13 @@ function confirmarVerificacaoEmail(e) {
         // Atualizar interface
         const perfilEmail = document.getElementById('profile-email');
         const status = document.getElementById('status-email');
-        
+
         if (perfilEmail) perfilEmail.textContent = novoEmail;
         if (status) {
             status.className = 'verification-status verified';
-            status.innerHTML = '<span class="dot"></span><span>E-mail verificado ✓</span>';
+            status.innerHTML = usuario.emailVerificado
+                ? '<span class="dot"></span><span>E-mail verificado ✓</span>'
+                : '<span class="dot"></span><span>E-mail não verificado</span>';
         }
 
         fecharModal('modal-verificar-email');
@@ -227,46 +283,15 @@ function confirmarVerificacaoEmail(e) {
 }
 
 // ========== VERIFICAÇÃO DE TELEFONE ==========
-function solicitarVerificacaoTelefone(e) {
-    e.preventDefault();
-    
-    const input = document.getElementById('novo-telefone');
-    const telefone = input.value;
-
-    if (!validarTelefone(telefone)) {
-        marcarErro(input, 'error-novo-telefone');
-        return false;
-    }
-    limparErro(input, 'error-novo-telefone');
-
-    // Gerar código simulado
-    codigoTelefone = gerarCodigoAleatorio();
-    console.log('[DEV] Código de verificação (SMS):', codigoTelefone);
-
-    // Atualizar modal e exibir
-    const destino = document.getElementById('modal-telefone-destino');
-    if (destino) destino.textContent = telefone;
-    
-    const modal = document.getElementById('modal-verificar-telefone');
-    if (modal) {
-        modal.hidden = false;
-        modal.style.display = 'block';
-        focarPrimeiroDigito(modal);
-    }
-
-    iniciarTimer('telefone');
-    exibirToast('📱 Código SMS enviado!', 'success');
-    return false;
-}
 
 function confirmarVerificacaoTelefone(e) {
     if (e) e.preventDefault();
-    
+
     const codigo = obterCodigoVerificacao();
-    
+
     if (codigo === codigoTelefone) {
         const novoTelefone = document.getElementById('novo-telefone').value;
-        
+
         // Atualizar dados
         usuario.telefone = novoTelefone;
         usuario.telefoneVerificado = true;
@@ -274,11 +299,13 @@ function confirmarVerificacaoTelefone(e) {
         // Atualizar interface
         const perfilPhone = document.getElementById('profile-phone');
         const status = document.getElementById('status-telefone');
-        
+
         if (perfilPhone) perfilPhone.textContent = novoTelefone;
         if (status) {
             status.className = 'verification-status verified';
-            status.innerHTML = '<span class="dot"></span><span>Telefone verificado ✓</span>';
+            status.innerHTML = usuario.telefoneVerificado
+                ? '<span class="dot"></span><span>Telefone verificado ✓</span>'
+                : '<span class="dot"></span><span>Telefone não verificado</span>';
         }
 
         fecharModal('modal-verificar-telefone');
@@ -312,7 +339,7 @@ function iniciarTimer(tipo) {
     timers[tipo] = setInterval(() => {
         segundos--;
         timer.textContent = segundos;
-        
+
         if (segundos <= 0) {
             clearInterval(timers[tipo]);
             link.style.display = 'inline';
@@ -324,7 +351,7 @@ function iniciarTimer(tipo) {
 function reenviarCodigo(tipo) {
     const container = document.getElementById(`resend-${tipo}`);
     if (!container) return;
-    
+
     const link = container.querySelector('a');
     if (!link || link.style.display === 'none') return;
 
@@ -338,7 +365,7 @@ function reenviarCodigo(tipo) {
         console.log('[DEV] Novo código (SMS):', codigoTelefone);
         exibirToast('📱 Novo código SMS enviado!', 'success');
     }
-    
+
     iniciarTimer(tipo);
 }
 
@@ -349,7 +376,7 @@ function salvarPreferencias() {
         emailNotif: document.getElementById('toggle-email-notif')?.checked ?? true,
         whatsappNotif: document.getElementById('toggle-whatsapp-notif')?.checked ?? true
     };
-    
+
     console.log('💾 Preferências salvas:', prefs);
     exibirToast('✅ Preferências salvas com sucesso!', 'success');
 }
@@ -373,7 +400,7 @@ function gerarCodigoAleatorio() {
 function marcarErro(input, errorId) {
     const group = input.closest('.form-group');
     const error = document.getElementById(errorId);
-    
+
     if (group) group.classList.add('error');
     if (error) error.style.display = 'block';
 }
@@ -381,7 +408,7 @@ function marcarErro(input, errorId) {
 function limparErro(input, errorId) {
     const group = input.closest('.form-group');
     const error = document.getElementById(errorId);
-    
+
     if (group) group.classList.remove('error');
     if (error) error.style.display = 'none';
 }
@@ -389,15 +416,15 @@ function limparErro(input, errorId) {
 function fecharModal(id) {
     const modal = document.getElementById(id);
     if (!modal) return;
-    
+
     modal.hidden = true;
     modal.style.display = 'none';
-    
+
     // Limpar campos de código
     modal.querySelectorAll('.code-digit').forEach(input => {
         input.value = '';
     });
-    
+
     // Focar no primeiro campo do formulário pai, se existir
     const firstInput = modal.querySelector('form input:not([type="hidden"])');
     if (firstInput) firstInput.focus();
@@ -414,10 +441,10 @@ function focarPrimeiroDigito(modal) {
 function exibirToast(mensagem, tipo = '') {
     const toast = document.getElementById('toast');
     if (!toast) return;
-    
+
     toast.textContent = mensagem;
     toast.className = `toast ${tipo} show`;
-    
+
     setTimeout(() => {
         toast.classList.remove('show');
     }, 3500);
