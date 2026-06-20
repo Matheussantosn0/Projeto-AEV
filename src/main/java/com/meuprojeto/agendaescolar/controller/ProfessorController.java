@@ -1,16 +1,26 @@
 package com.meuprojeto.agendaescolar.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-
 import com.meuprojeto.agendaescolar.entity.TipoUsuario;
 import com.meuprojeto.agendaescolar.entity.Usuarios;
+import com.meuprojeto.agendaescolar.service.TurmasService;
+
 import jakarta.servlet.http.HttpSession;
+import java.time.Year;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/professor")
 public class ProfessorController {
+
+    private final TurmasService turmasService;
+
+    ProfessorController(TurmasService turmasService) {
+        this.turmasService = turmasService;
+    }
 
     @GetMapping("/pagina-do-professor")
     public String paginaProfessor(HttpSession session) {
@@ -18,10 +28,10 @@ public class ProfessorController {
         Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
 
         if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.PROFESSOR) {
-            return "redirect:/login"; // redireciona para a página de login com um parâmetro de erro
+            return "redirect:/login";
         }
 
-        return "navbar-professor"; // redireciona para a página do professor
+        return "navbar-professor";
     }
 
     @GetMapping("/minha-agenda-professor")
@@ -30,7 +40,7 @@ public class ProfessorController {
         Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
 
         if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.PROFESSOR) {
-            return "redirect:/login"; // redireciona para a página de login com um parâmetro de erro
+            return "redirect:/login";
         }
 
         return "calendario-professor";
@@ -42,7 +52,7 @@ public class ProfessorController {
         Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
 
         if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.PROFESSOR) {
-            return "redirect:/login"; // redireciona para a página de login com um parâmetro de erro
+            return "redirect:/login";
         }
         return "atividades-professor";
     }
@@ -53,9 +63,22 @@ public class ProfessorController {
         Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
 
         if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.PROFESSOR) {
-            return "redirect:/login"; // redireciona para a página de login com um parâmetro de erro
+            return "redirect:/login";
         }
         return "boletim-professor";
     }
 
+    @PostMapping("/criar-turma")
+    public String criarTurma(@RequestParam String nome, @RequestParam Year anoLetivo, HttpSession session) {
+
+        Usuarios usuarios = (Usuarios) session.getAttribute("usuarioLogado");
+
+        if (usuarios == null || usuarios.getTipoUsuario() != TipoUsuario.PROFESSOR) {
+            return "redirect:/login";
+        }
+
+        turmasService.criarTurma(usuarios.getId(), nome, anoLetivo);
+
+        return "redirect:/professor/pagina-do-professor";
+    }
 }

@@ -48,45 +48,27 @@
         <section class="section" aria-labelledby="turmas-title">
             <div class="section-header">
                 <h2 id="turmas-title">Turmas Acompanhadas</h2>
-                <a th:href="@{/entrar-turma}" class="btn-primary">
+                <a th:href="@{/escola/entrar-turma}" class="btn-primary">
                     Vincular Turma
                 </a>
             </div>
 
             <div class="turmas-grid" id="turmasContainer">
                 
-                <!-- Turma 1: Matemática -->
-                <article class="turma-card" aria-labelledby="turma-mat-title">
+                <!-- Turma 1: Português -->
+                <article class="turma-card" aria-labelledby="turma-port-title">
                     <div class="turma-header">
-                        <h3 id="turma-mat-title">Matemática - 9º Ano</h3>
+                        <h3 id="turma-port-title">Português - 9º Ano</h3>
                         <span class="turma-type">Professor</span>
                     </div>
-                    <p>Prof. Carlos Silva</p>
+                    <p>Prof. Ana Carolina</p>
                     
                     <div class="turma-info">
                         <span>📅 Seg, Qua, Sex</span>
                         <span>⏰ 08:00 - 09:30</span>
                     </div>
                     
-                    <a th:href="@{/calendario-responsavel}" class="btn-access">
-                        Ver Agenda
-                    </a>
-                </article>
-
-                <!-- Turma 2: Português -->
-                <article class="turma-card" aria-labelledby="turma-port-title">
-                    <div class="turma-header">
-                        <h3 id="turma-port-title">Português - 8º Ano</h3>
-                        <span class="turma-type">Aluno</span>
-                    </div>
-                    <p>Profª. Ana Paula</p>
-                    
-                    <div class="turma-info">
-                        <span>📅 Ter, Qui</span>
-                        <span>⏰ 10:00 - 11:30</span>
-                    </div>
-                    
-                    <a th:href="@{/calendario-responsavel}" class="btn-access">
+                    <a th:href="@{/responsavel/agenda-do-aluno}" class="btn-access">
                         Ver Agenda
                     </a>
                 </article>
@@ -98,7 +80,7 @@
         <section class="section" aria-labelledby="escolas-title">
             <div class="section-header">
                 <h2 id="escolas-title">Escolas</h2>
-                <a th:href="@{/entrar-escola}" class="btn-primary">
+                <a th:href="@{/escola/entrar-escola}" class="btn-primary">
                     Vincular Escola
                 </a>
             </div>

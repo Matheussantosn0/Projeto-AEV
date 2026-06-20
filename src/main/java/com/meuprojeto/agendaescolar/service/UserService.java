@@ -1,7 +1,6 @@
 package com.meuprojeto.agendaescolar.service;
 
 import org.springframework.stereotype.Service;
-import org.hibernate.annotations.Nationalized;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.meuprojeto.agendaescolar.repository.UsuariosRepository;
 import com.meuprojeto.agendaescolar.entity.Usuarios;

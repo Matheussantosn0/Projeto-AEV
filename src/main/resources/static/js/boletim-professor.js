@@ -324,7 +324,7 @@ function voltar() {
 
 function sair() {
     // Em produção: implementar logout real
-    window.location.href = '../login.html';
+    window.location.href = '/login';
 }
 
 // ========== EVENTOS GLOBAIS ==========

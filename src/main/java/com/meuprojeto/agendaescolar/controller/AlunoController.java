@@ -45,7 +45,7 @@ public class AlunoController {
             if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.ALUNO) {
                 return "redirect:/login";
             }
-            return "atividades-aluno";
+            return "atividades-alunos";
         }
 
         @GetMapping("/meus-boletins")

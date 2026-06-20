@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.meuprojeto.agendaescolar.entity.Usuarios;
 import com.meuprojeto.agendaescolar.service.UserService;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller // registra a classe como um controlador, responsável por receber as requisições
             // HTTP e retornar as respostas
@@ -91,15 +92,43 @@ public class UserController {
                                                                              // sessão
         if (usuario != null) { // verifica se o usuário está logado
 
-            Usuarios usuarioAtualizado =
-            userService.atualizarTelefone(usuario.getId(), telefone); // chama o serviço responsável por atualizar o
-                                                                      // telefone do usuário, passando o id do usuário e
-                                                                      // o novo telefone como parâmetros
+            Usuarios usuarioAtualizado = userService.atualizarTelefone(usuario.getId(), telefone); // chama o serviço
+                                                                                                   // responsável por
+                                                                                                   // atualizar o
+                                                                                                   // telefone do
+                                                                                                   // usuário, passando
+                                                                                                   // o id do usuário e
+                                                                                                   // o novo telefone
+                                                                                                   // como parâmetros
             session.setAttribute("usuarioLogado", usuarioAtualizado);
 
-            return "redirect:/escola/configurar-perfil?success=true"; // redireciona para a página de configuração de perfil
-                                                                 // com um parâmetro de sucesso
+            return "redirect:/escola/configurar-perfil?success=true"; // redireciona para a página de configuração de
+                                                                      // perfil
+            // com um parâmetro de sucesso
         }
-        return "redirect:/login?error=true"; // redireciona para a página de login com um parâmetro de erro se o usuário não estiver logado
+        return "redirect:/login?error=true"; // redireciona para a página de login com um parâmetro de erro se o usuário
+                                             // não estiver logado
     }
+
+    @GetMapping("/voltar")
+    public String voltar(HttpSession session) {
+
+        Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
+
+        if (usuario == null) {
+            return "redirect:/login";
+        }
+
+        switch (usuario.getTipoUsuario()) {
+
+            case ALUNO:
+                return "redirect:/aluno/pagina-do-aluno";
+
+            case RESPONSAVEL:
+                return "redirect:/responsavel/pagina-do-responsavel";
+
+        }
+        return "redirect:/login";
+    }
+
 }

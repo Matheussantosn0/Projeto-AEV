@@ -55,7 +55,7 @@
             </div>
             <div class="user-profile">
                 <span class="user-name">👨‍🏫 Professor</span>
-                <a th:href="@{/index}" class="btn-back" aria-label="Voltar ao menu principal">← Voltar</a>
+                <a th:href="@{/professor/pagina-do-professor}" class="btn-back" aria-label="Voltar ao menu principal">← Voltar</a>
             </div>
         </div>
     </header>
@@ -76,58 +76,12 @@
         <!-- Painel: Cadastrar Nova Turma -->
         <section id="panel-cadastrar" class="card form-section" role="tabpanel" aria-labelledby="tab-cadastrar">
             <h2>📝 Nova Turma</h2>
-            <form id="formTurma" novalidate>
+            <form id="formTurma" th:action="@{/professor/criar-turma}" method="post">
                 <div class="input-group">
-                    <label for="nomeMateria">Nome da Matéria <span aria-hidden="true">*</span></label>
-                    <input type="text" id="nomeMateria" name="nomeMateria" placeholder="Ex: Matemática, História, Física..." required aria-required="true">
+                    <label for="nome">Nome da Matéria <span aria-hidden="true">*</span></label>
+                    <input type="text" id="nome" name="nome" placeholder="Ex: Matemática, História, Física..." required aria-required="true">
                     <span class="error" id="error-nomeMateria">Informe o nome da matéria</span>
                 </div>
-                <div class="input-group">
-                    <label>Dias da Semana <span aria-hidden="true">*</span></label>
-                    <div class="days-container" role="group" aria-label="Selecione os dias da semana">
-                        <label class="day-check"><input type="checkbox" name="dias" value="Seg" aria-label="Segunda-feira"> Seg</label>
-                        <label class="day-check"><input type="checkbox" name="dias" value="Ter" aria-label="Terça-feira"> Ter</label>
-                        <label class="day-check"><input type="checkbox" name="dias" value="Qua" aria-label="Quarta-feira"> Qua</label>
-                        <label class="day-check"><input type="checkbox" name="dias" value="Qui" aria-label="Quinta-feira"> Qui</label>
-                        <label class="day-check"><input type="checkbox" name="dias" value="Sex" aria-label="Sexta-feira"> Sex</label>
-                    </div>
-                    <span class="error" id="error-dias">Selecione pelo menos um dia</span>
-                </div>
-                <div class="row">
-                    <div class="input-group">
-                        <label for="horarioInicio">Início <span aria-hidden="true">*</span></label>
-                        <input type="time" id="horarioInicio" name="horarioInicio" required aria-required="true">
-                    </div>
-                    <div class="input-group">
-                        <label for="horarioFim">Fim <span aria-hidden="true">*</span></label>
-                        <input type="time" id="horarioFim" name="horarioFim" required aria-required="true">
-                    </div>
-                    <div class="input-group">
-                        <label for="turno">Turno <span aria-hidden="true">*</span></label>
-                        <select id="turno" name="turno" required aria-required="true">
-                            <option value="">Selecione...</option>
-                            <option value="Matutino">Matutino</option>
-                            <option value="Vespertino">Vespertino</option>
-                            <option value="Noturno">Noturno</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label for="escolaSelect">Vincular à Escola <span aria-hidden="true">*</span></label>
-                    <div class="escola-select-wrapper">
-                        <select id="escolaSelect" name="escolaId" required aria-required="true">
-                            <option value="">Selecione uma escola...</option>
-                            <option value="1">CEF 308</option>
-                            <option value="2">Colégio Santa Rita</option>
-                        </select>
-                        <button type="button" class="btn-add" onclick="abrirModalNovaEscola()" aria-label="Cadastrar nova escola">+ Nova</button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-group">
-                        <label for="vagas">Número de Vagas</label>
-                        <input type="number" id="vagas" name="vagas" placeholder="Ex: 30" min="1" max="100">
-                    </div>
                     <div class="input-group">
                         <label for="anoLetivo">Ano Letivo</label>
                         <input type="number" id="anoLetivo" name="anoLetivo" placeholder="Ex: 2024" min="2020" max="2030" value="2024">
@@ -434,27 +388,6 @@
         }
         
         // Submit do formulário de turma
-        document.getElementById('formTurma')?.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const nome = document.getElementById('nomeMateria').value;
-            const dias = document.querySelectorAll('input[name="dias"]:checked');
-            
-            if (!nome) {
-                document.getElementById('error-nomeMateria').style.display = 'block';
-                return;
-            }
-            if (dias.length === 0) {
-                document.getElementById('error-dias').style.display = 'block';
-                return;
-            }
-            
-            const codigo = 'TUR-' + Math.random().toString(36).substr(2, 6).toUpperCase();
-            document.getElementById('generatedCode').textContent = codigo;
-            document.getElementById('codeResult').classList.remove('hidden');
-            showToast('✅ Turma cadastrada com sucesso!', 'success');
-            this.reset();
-            document.querySelectorAll('.error').forEach(el => el.style.display = 'none');
-        });
         
         // Configurar form de configurações
         document.getElementById('formConfigTurma')?.addEventListener('submit', function(e) {
