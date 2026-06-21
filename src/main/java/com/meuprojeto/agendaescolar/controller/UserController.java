@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.meuprojeto.agendaescolar.entity.Usuarios;
 import com.meuprojeto.agendaescolar.service.UserService;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller // registra a classe como um controlador, responsável por receber as requisições
             // HTTP e retornar as respostas

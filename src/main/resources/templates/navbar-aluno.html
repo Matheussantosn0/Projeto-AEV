@@ -54,22 +54,22 @@
             <div class="turmas-grid" id="turmasContainer">
                 
                 <!-- Turma 1: Português -->
-                <article class="turma-card" aria-labelledby="turma-port-title">
+                <!-- Adiciona as turmas cadastradas na aba Minhas turmas -->
+
+                <article class="turma-card" th:each="turma : ${turmas}" aria-labelledby="turma-title">
                     <div class="turma-header">
-                        <h3 id="turma-port-title">Português - 9º Ano</h3>
+                        <h3 th:text="${turma.nome}">Nome da Turma</h3>
                         <span class="turma-type">Professor</span>
                     </div>
-                    <p>Prof. Ana Carolina</p>
-                    
                     <div class="turma-info">
-                        <span>📅 Seg, Qua, Sex</span>
-                        <span>⏰ 08:00 - 09:30</span>
+                        <span>📅 <span th:text="${turma.anoLetivo}"></span></span>
                     </div>
-                    
-                    <a th:href="@{/aluno/minha-agenda-aluno}" class="btn-access">
+
+                    <a th:href="@{/aluno/minha-agenda}" class="btn-access">
                         Acessar Agenda
                     </a>
                 </article>
+                <p th:if="${#lists.isEmpty(turmas)}">Nenhum turma cadastrada.</p>
 
             </div>
         </section>

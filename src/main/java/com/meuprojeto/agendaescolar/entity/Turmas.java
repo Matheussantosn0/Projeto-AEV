@@ -2,9 +2,12 @@ package com.meuprojeto.agendaescolar.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
+import org.hibernate.annotations.JdbcTypeCode;
 
+import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import java.time.Year;
@@ -14,10 +17,13 @@ import java.time.Year;
 public class Turmas {
 
     @Id // define como chave primária
+    @GeneratedValue
     @Column(columnDefinition = "BINARY(16)") // UUID armazenado em formato binário
+    @JdbcTypeCode(Types.BINARY)
     private UUID id;
 
-    @Column(name = "usuarios_id", nullable = false)
+    @Column(name = "usuarios_id", nullable = false, columnDefinition = "BINARY(16)")
+    @JdbcTypeCode(Types.BINARY)
     private UUID usuariosId;
 
     @Column(name = "nome", nullable = false)

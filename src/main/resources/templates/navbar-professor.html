@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Painel do Professor - Agenda Escolar Virtual">
     <title>Menu Principal - Professor | AEV</title>
-    
+
     <!-- Stylesheet -->
     <link rel="stylesheet" th:href="@{/css/navbar-professor.css}">
 </head>
+
 <body>
 
     <!-- ========== CABEÇALHO ========== -->
     <header class="header" role="banner">
         <div class="header-content">
-            
+
             <!-- Logo -->
             <div class="logo">
                 <h1>📖 Menu - AEV</h1>
@@ -35,7 +37,7 @@
 
     <!-- ========== CONTEÚDO PRINCIPAL ========== -->
     <main id="main-content" class="container" role="main">
-        
+
         <!-- Seção: Seleção de Perfil -->
         <section class="section profile-selection" aria-labelledby="perfil-title">
             <h2 id="perfil-title">Bem-vindo, a Agenda Escolar Virtual</h2>
@@ -49,30 +51,31 @@
                     <a th:href="@{/escola/gerenciar-turmas}" class="btn-primary">
                         Gerenciar Turmas
                     </a>
-                    <a th:href="@{/escola/entrar-turma}" class="btn-primary">
-                        Entrar em Turma
-                    </a>
                 </div>
             </div>
 
             <div class="turmas-grid" id="turmasContainer">
-                
-                <!-- Turma 1: Português -->
-                <article class="turma-card" aria-labelledby="turma-port-title">
+
+                <!-- Adiciona as turmas cadastradas na aba Minhas turmas -->
+
+                <article class="turma-card" th:each="turma : ${turmas}" aria-labelledby="turma-title">
                     <div class="turma-header">
-                        <h3 id="turma-port-title">Português - 9º Ano</h3>
+                        <h3 th:text="${turma.nome}">Nome da Turma</h3>
                         <span class="turma-type">Professor</span>
                     </div>
-                    
                     <div class="turma-info">
-                        <span>📅 Seg, Qua, Sex</span>
-                        <span>⏰ 08:00 - 09:30</span>
+                        <span>📅 <span th:text="${turma.anoLetivo}"></span></span>
+                        <span>🔑 <span th:text="${turma.codigoAcesso}"></span></span>
                     </div>
-                    
+
                     <a th:href="@{/professor/minha-agenda-professor}" class="btn-access">
                         Acessar Agenda
                     </a>
+                    <form th:action="@{/professor/excluir-turma/{codigo}(codigo=${turma.codigoAcesso})}" method="post">
+                        <button type="submit"class="btn-danger">Excluir</button>
+                    </form>
                 </article>
+                <p th:if="${#lists.isEmpty(turmas)}">Nenhum turma cadastrada.</p>
             </div>
         </section>
 
@@ -88,7 +91,7 @@
             </div>
 
             <div class="escolas-grid" id="escolasContainer">
-                
+
                 <!-- Escola 1 -->
                 <article class="escola-card" aria-labelledby="escola-cef-title">
                     <div class="escola-icon" aria-hidden="true">🏫</div>
@@ -105,26 +108,19 @@
     </main>
 
     <!-- ========== MODAIS ========== -->
-    
+
     <!-- Modal: Entrar em Turma -->
     <div id="modalEntrarTurma" class="modal" role="dialog" aria-labelledby="modal-turma-title" aria-modal="true" hidden>
         <div class="modal-content">
             <button type="button" class="close" aria-label="Fechar modal">&times;</button>
-            
+
             <h2 id="modal-turma-title">Entrar em Turma</h2>
-            
+
             <form id="formEntrarTurma" novalidate>
                 <div class="input-group">
                     <label for="codigoTurma">Código da Turma</label>
-                    <input 
-                        type="text" 
-                        id="codigoTurma" 
-                        name="codigoTurma"
-                        placeholder="Ex: MAT-9A-2024" 
-                        pattern="[A-Z]{3}-\d+[A-Z]-\d{4}"
-                        required
-                        aria-required="true"
-                    >
+                    <input type="text" id="codigoTurma" name="codigoTurma" placeholder="Ex: MAT-9A-2024"
+                        pattern="[A-Z]{3}-\d+[A-Z]-\d{4}" required aria-required="true">
                 </div>
 
                 <div class="input-group">
@@ -145,56 +141,35 @@
     </div>
 
     <!-- Modal: Criar Escola -->
-    <div id="modalCriarEscola" class="modal" role="dialog" aria-labelledby="modal-escola-title" aria-modal="true" hidden>
+    <div id="modalCriarEscola" class="modal" role="dialog" aria-labelledby="modal-escola-title" aria-modal="true"
+        hidden>
         <div class="modal-content">
             <button type="button" class="close" aria-label="Fechar modal">&times;</button>
-            
+
             <h2 id="modal-escola-title">Criar Nova Escola</h2>
-            
+
             <form id="formCriarEscola" novalidate>
                 <div class="input-group">
                     <label for="nomeEscola">Nome da Escola</label>
-                    <input 
-                        type="text" 
-                        id="nomeEscola" 
-                        name="nomeEscola"
-                        placeholder="Ex: Escola Municipal São José" 
-                        required
-                        aria-required="true"
-                    >
+                    <input type="text" id="nomeEscola" name="nomeEscola" placeholder="Ex: Escola Municipal São José"
+                        required aria-required="true">
                 </div>
 
                 <div class="input-group">
                     <label for="endereco">Endereço</label>
-                    <input 
-                        type="text" 
-                        id="endereco" 
-                        name="endereco"
-                        placeholder="Rua, número, bairro, cidade" 
-                        required
-                        aria-required="true"
-                    >
+                    <input type="text" id="endereco" name="endereco" placeholder="Rua, número, bairro, cidade" required
+                        aria-required="true">
                 </div>
 
                 <div class="input-group">
                     <label for="telefone">Telefone</label>
-                    <input 
-                        type="tel" 
-                        id="telefone" 
-                        name="telefone"
-                        placeholder="(00) 00000-0000"
-                        pattern="\(\d{2}\)\s\d{5}-\d{4}"
-                    >
+                    <input type="tel" id="telefone" name="telefone" placeholder="(00) 00000-0000"
+                        pattern="\(\d{2}\)\s\d{5}-\d{4}">
                 </div>
 
                 <div class="input-group">
                     <label for="emailEscola">E-mail</label>
-                    <input 
-                        type="email" 
-                        id="emailEscola" 
-                        name="emailEscola"
-                        placeholder="contato@escola.com.br"
-                    >
+                    <input type="email" id="emailEscola" name="emailEscola" placeholder="contato@escola.com.br">
                 </div>
 
                 <button type="submit" class="btn-primary">
@@ -205,4 +180,5 @@
     </div>
 
 </body>
+
 </html>

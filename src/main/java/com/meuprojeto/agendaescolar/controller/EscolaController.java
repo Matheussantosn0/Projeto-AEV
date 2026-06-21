@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.meuprojeto.agendaescolar.entity.TipoUsuario;
 import com.meuprojeto.agendaescolar.entity.Usuarios;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.ui.Model;
 
+import org.springframework.ui.Model;
 
 @Controller
 @RequestMapping("/escola")
@@ -69,5 +69,4 @@ public class EscolaController {
 
             return "configuracao-perfil";
         }
-        
 }

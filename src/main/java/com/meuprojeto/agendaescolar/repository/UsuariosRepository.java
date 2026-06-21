@@ -18,21 +18,4 @@ public interface UsuariosRepository extends JpaRepository<Usuarios, UUID> {
         String p_senha,
         String p_telefone
     );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

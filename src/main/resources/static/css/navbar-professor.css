@@ -154,6 +154,7 @@ img {
 
 /* Botão de Acesso (Cards) */
 .btn-access {
+    display: block;
     width: 100%;
     padding: 0.75rem;
     background: var(--color-primary);
@@ -184,6 +185,30 @@ img {
 
 .btn-logout:hover {
     background-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-danger {
+    width: 100%;
+    background-color: #c0392b;
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 8px;
+    transition: var(--transition-default);
+}
+
+.btn-danger:hover {
+    background-color: #a93226;
+}
+
+.turma-card form {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
 }
 
 /* ========== HEADER ========== */
