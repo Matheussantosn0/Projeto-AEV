@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import com.meuprojeto.agendaescolar.entity.Turmas;
+import java.util.Optional;
 
 @Repository
 public interface TurmasRepository extends JpaRepository<Turmas, UUID> {
@@ -26,4 +27,6 @@ public interface TurmasRepository extends JpaRepository<Turmas, UUID> {
     List<Turmas> findByProfessorId(@Param("professorId") UUID professorId);
 
     void deleteByCodigoAcesso(String codigoAcesso);
+
+    Optional<Turmas> findByCodigoAcesso(String codigoAcesso);
 }
