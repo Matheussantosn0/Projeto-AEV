@@ -22,7 +22,7 @@
                     Digite seu e-mail cadastrado e enviaremos um link para redefinir sua senha.
                 </p>
 
-                <form action="#" method="POST">
+               <form th:action="@{/recuperar-senha/solicitar}" method="POST">
                     <div class="input-group">
                         <label for="email">E-mail</label>
                         <input type="email" id="email" name="email" placeholder="Seu e-mail cadastrado" required>

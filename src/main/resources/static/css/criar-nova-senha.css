@@ -12,10 +12,107 @@ body {
     align-items: center;
     min-height: 100vh;
     background-color: #333;
-    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('../img/ImagemDeFundoCentral-Home.png');
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('../img/ImagemDeFundoCentral-Home.png');
     background-size: cover;
     background-position: center;
 }
+
+.card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 1.5rem;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+}
+
+p.sub {
+    color: #718096;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    font-size: 0.85rem;
+    color: #4a5568;
+    margin-bottom: 0.3rem;
+    margin-top: 1rem;
+}
+
+input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.2s;
+}
+
+input:focus {
+    border-color: #164c84;
+}
+
+input#codigo {
+    font-size: 1.8rem;
+    letter-spacing: 0.5rem;
+    text-align: center;
+}
+
+button {
+    width: 100%;
+    padding: 0.75rem;
+    background: #164c84;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    transition: background 0.2s;
+}
+
+button:hover {
+    background: #164c84;
+}
+
+.alert {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.alert-success {
+    background: #c6f6d5;
+    color: #276749;
+}
+
+.alert-error {
+    background: #fed7d7;
+    color: #9b2c2c;
+}
+
+.voltar {
+    display: block;
+    text-align: center;
+    margin-top: 1rem;
+    color: #164c84;
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.voltar:hover {
+    text-decoration: underline;
+}
+
 /* Container Principal do Card */
 .login-container {
     display: flex;
@@ -25,7 +122,7 @@ body {
     background-color: #fff;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
 /* Seção da Imagem (Esquerda) */
@@ -163,7 +260,7 @@ body {
         width: 100%;
         padding: 30px;
     }
-    
+
     .form-content h1 {
         font-size: 28px;
     }

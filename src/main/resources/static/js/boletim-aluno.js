@@ -7,11 +7,6 @@
 'use strict';
 
 // ========== DADOS DO ALUNO (Simulação - Substituir por API) ==========
-const dadosAluno = {
-    nome: 'João Silva',
-    turma: '9º Ano B',
-    matricula: '2026001'
-};
 
 // ========== LISTA DE BOLETINS (Simulação - Substituir por fetch) ==========
 const boletins = [
@@ -23,7 +18,6 @@ const boletins = [
 
 // ========== INICIALIZAÇÃO ==========
 document.addEventListener('DOMContentLoaded', () => {
-    inicializarPerfil();
     renderizarBoletins();
     configurarFechamentoModal();
 });
@@ -32,11 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
  * Preenche os dados do aluno na interface
  */
 function inicializarPerfil() {
-    const nomeEl = document.getElementById('aluno-nome');
-    const turmaEl = document.getElementById('turma-info');
-    
-    if (nomeEl) nomeEl.textContent = dadosAluno.nome;
-    if (turmaEl) turmaEl.textContent = `${dadosAluno.turma} • Matrícula: ${dadosAluno.matricula}`;
+    // Nome e turma vêm do Thymeleaf, não sobrescreve
 }
 
 // ========== RENDERIZAÇÃO DOS BOLETINS ==========
@@ -152,7 +142,7 @@ function exibirToast(mensagem, tipo = 'info') {
 }
 
 function voltar() {
-    window.history.back();
+    window.location.href = '/agendaescolar/aluno/minha-agenda-aluno';
 }
 
 function sair() {

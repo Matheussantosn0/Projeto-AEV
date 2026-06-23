@@ -6,11 +6,6 @@
 'use strict';
 
 // ========== DADOS DO ALUNO (Simulação - Substituir por API) ==========
-const dadosAluno = {
-    nome: 'João Silva',
-    turma: '9º Ano B',
-    matricula: '2026001'
-};
 
 // ========== LISTA DE ATIVIDADES (Simulação - Substituir por fetch) ==========
 const atividades = [
@@ -67,7 +62,6 @@ let arquivoEntrega = null;
 
 // ========== INICIALIZAÇÃO ==========
 document.addEventListener('DOMContentLoaded', () => {
-    inicializarPerfil();
     renderizarAtividades();
     configurarDropZone();
     configurarFechamentoModais();
@@ -222,7 +216,7 @@ function aplicarFiltros(e) {
 function filtrarPendentes() {
     const select = document.getElementById('filtro-status');
     if (select) {
-        select.value = 'nova';
+        select.value = select.value === 'nova' ? 'all' : 'nova';
         renderizarAtividades();
     }
 }
@@ -431,7 +425,7 @@ function exibirToast(mensagem, tipo = 'info') {
 }
 
 function voltar() {
-    window.history.back();
+    window.location.href = '/agendaescolar/aluno/minha-agenda-aluno';
 }
 
 function sair() {

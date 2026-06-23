@@ -29,4 +29,6 @@ public interface TurmasRepository extends JpaRepository<Turmas, UUID> {
     void deleteByCodigoAcesso(String codigoAcesso);
 
     Optional<Turmas> findByCodigoAcesso(String codigoAcesso);
+
+    List<Turmas> findByUsuariosId(UUID usuariosId);
 }

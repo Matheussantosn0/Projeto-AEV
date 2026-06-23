@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Agenda escolar do aluno - Acompanhe atividades, eventos e prazos">
     <title>Minha Agenda | Aluno - AEV</title>
-    
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Stylesheet -->
     <link rel="stylesheet" th:href="@{/css/calendario-alunos.css}">
 </head>
+
 <body>
 
     <!-- ========== SKIP LINK (Acessibilidade) ========== -->
@@ -25,15 +27,11 @@
             </div>
             <div class="search-bar" role="search">
                 <label for="searchInput" class="sr-only">Buscar atividades e eventos</label>
-                <input 
-                    type="search" 
-                    id="searchInput" 
-                    placeholder="🔍 Buscar por atividades e eventos..."
-                    aria-label="Buscar atividades e eventos"
-                >
+                <input type="search" id="searchInput" placeholder="🔍 Buscar por atividades e eventos..."
+                    aria-label="Buscar atividades e eventos">
             </div>
         </div>
-        
+
         <div class="header-right">
             <nav class="header-nav" aria-label="Navegação principal">
                 <button class="nav-btn active" aria-current="page" aria-label="Ver calendário">
@@ -49,7 +47,7 @@
                     <a th:href="@{/aluno/minhas-atividades}"><span>Atividades</span></a>
                 </button>
             </nav>
-            
+
             <div class="user-profile" aria-label="Perfil do usuário">
                 <div class="avatar" aria-hidden="true">👤</div>
                 <div class="user-info">
@@ -62,7 +60,7 @@
 
     <!-- ========== CONTEÚDO PRINCIPAL ========== -->
     <div class="main-container">
-        
+
         <!-- Sidebar: Lista de Atividades -->
         <aside class="sidebar" id="sidebar" aria-label="Lista de atividades">
             <div class="sidebar-header">
@@ -95,7 +93,7 @@
         <div class="modal-content">
             <button type="button" class="close" onclick="fecharModal()" aria-label="Fechar modal">&times;</button>
             <h2 id="modalDate"></h2>
-            
+
             <div class="modal-body">
                 <!-- Seção: Eventos -->
                 <section class="event-section" aria-labelledby="events-title">
@@ -118,12 +116,8 @@
                     <h3 id="add-event-title">➕ Adicionar Lembrete</h3>
                     <div class="event-input-row">
                         <label for="newEventInput" class="sr-only">Descrição do evento</label>
-                        <input 
-                            type="text" 
-                            id="newEventInput" 
-                            placeholder="Ex: Entregar trabalho de História"
-                            aria-label="Descrição do novo evento"
-                        >
+                        <input type="text" id="newEventInput" placeholder="Ex: Entregar trabalho de História"
+                            aria-label="Descrição do novo evento">
                         <button type="button" class="btn-add-event" id="btnAddEvent">Adicionar</button>
                     </div>
                 </section>
@@ -134,8 +128,13 @@
     <!-- ========== TOAST DE NOTIFICAÇÃO ========== -->
     <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true"></div>
 
+    <script th:inline="javascript">
+        const alunoNome = /*[[${usuario.nomeCompleto}]]*/ 'Aluno';
+        const alunoTurmas = /*[[${turmas}]]*/[];
+    </script>
     <!-- ========== SCRIPT PRINCIPAL ========== -->
     <script th:src="@{/js/calendario-aluno.js}"></script>
 
 </body>
+
 </html>

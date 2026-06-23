@@ -13,4 +13,6 @@ public interface MatriculasTurmasRepository extends JpaRepository<MatriculasTurm
 
     // Busca todas as matrículas de um aluno pelo seu ID
     List<MatriculasTurmas> findByAlunosId(UUID alunosId);
+    
+    List<MatriculasTurmas> findByTurmasId(UUID turmasId);
 }

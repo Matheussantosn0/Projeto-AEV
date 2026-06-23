@@ -15,9 +15,4 @@ public class LoginController {
         public String Cadastro() {
             return "cadastro";
     }
-    
-        @GetMapping("/recuperar-senha")
-        public String RecuperarSenha() {
-            return "recuperar-senha";
-    }
 }

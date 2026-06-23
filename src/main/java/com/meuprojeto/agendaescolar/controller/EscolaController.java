@@ -13,6 +13,7 @@ import com.meuprojeto.agendaescolar.entity.Turmas;
 import com.meuprojeto.agendaescolar.entity.Usuarios;
 import com.meuprojeto.agendaescolar.service.TurmasService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.Optional;
 
@@ -70,7 +71,12 @@ public class EscolaController {
     }
 
     @GetMapping("/configurar-perfil")
-    public String configurarPerfil(HttpSession session, Model model) {
+    public String configurarPerfil(HttpSession session, Model model, HttpServletResponse response) {
+
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
+
         Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
 
         if (usuario == null) {

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperação de Senha</title>
+    <link rel="stylesheet" th:href="@{/css/criar-nova-senha.css}">
+</head>
+
+<body>
+
+    <div class="login-container">
+        <div class="image-section">
+            <!-- Mantém a mesma imagem do login para consistência visual -->
+            <img th:src="@{/img/imagemDerecuperacao.png}" alt="Ilustração de Recuperação">
+        </div>
+
+        <div class="card">
+            <h1>Nova Senha</h1>
+            <p class="sub">Escolha uma nova senha para sua conta.</p>
+
+            <div th:if="${erro}" class="alert alert-error" th:text="${erro}"></div>
+
+            <form th:action="@{/recuperar-senha/criar-nova-senha}" method="post">
+                <!-- Campos ocultos para manter contexto -->
+                <input type="hidden" name="email" th:value="${email}">
+                <input type="hidden" name="codigo" th:value="${codigo}">
+
+                <label for="novaSenha">Nova senha</label>
+                <input type="password" id="novaSenha" name="novaSenha" minlength="6" required autofocus>
+                <span class="requisitos">Mínimo de 6 caracteres</span>
+
+                <label for="confirmarSenha">Confirmar senha</label>
+                <input type="password" id="confirmarSenha" name="confirmarSenha" minlength="6" required>
+
+                <button type="submit">Salvar nova senha</button>
+                <p class="back-to-login">
+                    Lembrou sua senha? <a th:href="@{/login}">Voltar para o Login</a>
+                </p>
+            </form>
+        </div>
+
+        <script>
+            document.querySelector('form').addEventListener('submit', function (e) {
+                const nova = document.getElementById('novaSenha').value;
+                const confirmar = document.getElementById('confirmarSenha').value;
+                if (nova !== confirmar) {
+                    e.preventDefault();
+                    alert('As senhas não coincidem.');
+                }
+            });
+        </script>
+
+    </div>
+</body>
+
+</html>
