@@ -57,4 +57,9 @@ public class AvisosService {
     public List<Anotacoes> listarAnotacoesPorAluno(UUID criadorId) {
         return anotacoesRepository.findByCriadorId(criadorId);
     }
+
+    @Transactional
+    public void excluirAviso(UUID id) {
+        avisosRepository.deleteById(id);
+    }
 }

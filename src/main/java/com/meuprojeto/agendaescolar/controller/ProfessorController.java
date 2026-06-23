@@ -1,5 +1,6 @@
 package com.meuprojeto.agendaescolar.controller;
 
+import com.meuprojeto.agendaescolar.entity.Avisos;
 import com.meuprojeto.agendaescolar.entity.TipoUsuario;
 import com.meuprojeto.agendaescolar.entity.Usuarios;
 import com.meuprojeto.agendaescolar.service.TurmasService;
@@ -12,6 +13,8 @@ import java.time.LocalDate;
 import java.time.Year;
 import org.springframework.ui.Model;
 import java.util.List;
+import java.util.UUID;
+
 import com.meuprojeto.agendaescolar.service.AvisosService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -138,7 +141,6 @@ public class ProfessorController {
         return "redirect:/professor/pagina-do-professor";
     }
 
-    
     @PostMapping("/aviso")
     @ResponseBody
     public ResponseEntity<?> criarAviso(
@@ -147,19 +149,45 @@ public class ProfessorController {
             @RequestParam String conteudo,
             @RequestParam String dataEvento,
             HttpSession session) {
- 
+
         Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
         if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.PROFESSOR) {
             return ResponseEntity.status(401).build();
         }
- 
+
         Turmas turma = turmasService.buscarPorCodigo(turmaId).orElse(null);
         if (turma == null) {
             return ResponseEntity.badRequest().body("Turma não encontrada");
         }
- 
+
         LocalDate data = LocalDate.parse(dataEvento);
         avisosService.criarAviso(usuario.getId(), turma.getId(), titulo, conteudo, data);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/avisos-turma")
+    @ResponseBody
+    public ResponseEntity<?> avisosPorTurma(@RequestParam String turmaId, HttpSession session) {
+        Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
+        if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.PROFESSOR) {
+            return ResponseEntity.status(401).build();
+        }
+        Turmas turma = turmasService.buscarPorCodigo(turmaId).orElse(null);
+        if (turma == null)
+            return ResponseEntity.badRequest().body("Turma não encontrada");
+
+        List<Avisos> avisos = avisosService.listarAvisosPorTurma(turma.getId());
+        return ResponseEntity.ok(avisos);
+    }
+
+    @PostMapping("/excluir-aviso/{id}")
+    @ResponseBody
+    public ResponseEntity<?> excluirAviso(@PathVariable UUID id, HttpSession session) {
+        Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
+        if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.PROFESSOR) {
+            return ResponseEntity.status(401).build();
+        }
+        avisosService.excluirAviso(id);
         return ResponseEntity.ok().build();
     }
 }

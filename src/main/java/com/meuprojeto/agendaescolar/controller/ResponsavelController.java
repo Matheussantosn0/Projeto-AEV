@@ -1,15 +1,18 @@
 package com.meuprojeto.agendaescolar.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.meuprojeto.agendaescolar.entity.TipoUsuario;
 import com.meuprojeto.agendaescolar.entity.Turmas;
 import com.meuprojeto.agendaescolar.entity.Usuarios;
+import com.meuprojeto.agendaescolar.service.AvisosService;
 import com.meuprojeto.agendaescolar.service.TurmasService;
 import java.util.List;
 import org.springframework.ui.Model;
@@ -23,6 +26,9 @@ public class ResponsavelController {
 
     @Autowired
     private TurmasService turmasService;
+
+    @Autowired
+    private AvisosService avisosService;
 
     @GetMapping("/pagina-do-responsavel")
     public String paginaResponsavel(HttpSession session, Model model, HttpServletResponse response) {
@@ -48,12 +54,20 @@ public class ResponsavelController {
         response.setDateHeader("Expires", 0);
 
         Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
-
         if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.RESPONSAVEL) {
-            return "redirect:/login"; // redireciona para a página de login com um parâmetro de erro
+            return "redirect:/login";
         }
+
+        // Busca as turmas dos filhos vinculados ao responsável
+        List<Turmas> turmasFilho = turmasService.listarTurmasPorResponsavel(usuario.getId());
+
+        // Pega o código de acesso da primeira turma (se existir)
+        String codigoTurma = turmasFilho.isEmpty() ? null : turmasFilho.get(0).getCodigoAcesso();
+
+        model.addAttribute("turmaFilhoCodigo", codigoTurma);
+        model.addAttribute("turmas", turmasFilho);
         model.addAttribute("usuario", usuario);
-        return "calendario-responsavel"; // redireciona para a página do responsavel
+        return "calendario-responsavel";
     }
 
     @GetMapping("/desempenho-do-aluno")
@@ -96,5 +110,19 @@ public class ResponsavelController {
         }
         turmasService.vincularResponsavelAluno(usuario.getId(), emailAluno);
         return "redirect:/responsavel/pagina-do-responsavel";
+    }
+
+    @GetMapping("/avisos-filho")
+    @ResponseBody
+    public ResponseEntity<?> avisosDoFilho(@RequestParam String turmaId, HttpSession session) {
+        Usuarios usuario = (Usuarios) session.getAttribute("usuarioLogado");
+        if (usuario == null || usuario.getTipoUsuario() != TipoUsuario.RESPONSAVEL) {
+            return ResponseEntity.status(401).build();
+        }
+        Turmas turma = turmasService.buscarPorCodigo(turmaId).orElse(null);
+        if (turma == null)
+            return ResponseEntity.badRequest().body("Turma não encontrada");
+
+        return ResponseEntity.ok(avisosService.listarAvisosPorTurma(turma.getId()));
     }
 }

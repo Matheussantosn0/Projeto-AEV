@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Acompanhe a agenda escolar dos seus filhos - Agenda Escolar Virtual">
     <title>Agenda dos Filhos | Responsável - AEV</title>
-    
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Stylesheet -->
     <link rel="stylesheet" th:href="@{/css/calendario-responsavel.css}">
 </head>
+
 <body>
 
     <!-- ========== SKIP LINK (Acessibilidade) ========== -->
@@ -25,15 +27,11 @@
             </div>
             <div class="search-bar" role="search">
                 <label for="searchInput" class="sr-only">Buscar atividades e eventos</label>
-                <input 
-                    type="search" 
-                    id="searchInput" 
-                    placeholder="🔍 Buscar por atividades e eventos..."
-                    aria-label="Buscar atividades e eventos dos filhos"
-                >
+                <input type="search" id="searchInput" placeholder="🔍 Buscar por atividades e eventos..."
+                    aria-label="Buscar atividades e eventos dos filhos">
             </div>
         </div>
-        
+
         <div class="header-right">
             <nav class="header-nav" aria-label="Navegação principal">
                 <button class="nav-btn active" aria-current="page" aria-label="Ver calendário">
@@ -49,7 +47,7 @@
                     <a th:href="@{/responsavel/desempenho-do-aluno}"><span>Avaliações</span></a>
                 </button>
             </nav>
-            
+
             <div class="user-profile" aria-label="Perfil do usuário">
                 <div class="avatar" aria-hidden="true">👨‍👩‍👧‍👦</div>
                 <div class="user-info">
@@ -62,7 +60,7 @@
 
     <!-- ========== CONTEÚDO PRINCIPAL ========== -->
     <div class="main-container">
-        
+
         <!-- Sidebar: Desempenho dos Filhos (Visualização) -->
         <aside class="sidebar" id="sidebar" aria-label="Desempenho dos filhos">
             <div class="sidebar-header">
@@ -95,7 +93,7 @@
         <div class="modal-content">
             <button type="button" class="close" onclick="fecharModal()" aria-label="Fechar modal">&times;</button>
             <h2 id="modalDate"></h2>
-            
+
             <div class="modal-body">
                 <!-- Seção: Eventos do Dia -->
                 <section class="event-section" aria-labelledby="events-title">
@@ -117,7 +115,7 @@
                 <section class="info-section" aria-labelledby="info-title">
                     <h3 id="info-title" class="sr-only">Informação</h3>
                     <p class="view-only-notice">
-                        ℹ️ <strong>Modo visualização:</strong> Como responsável, você pode acompanhar 
+                        ℹ️ <strong>Modo visualização:</strong> Como responsável, você pode acompanhar
                         a agenda dos seus filhos. Para alterar eventos, entre em contato com a escola.
                     </p>
                 </section>
@@ -127,9 +125,12 @@
 
     <!-- ========== TOAST DE NOTIFICAÇÃO ========== -->
     <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true"></div>
-
+    <script th:inline="javascript">
+        const turmaFilhoCodigo = /*[[${turmaFilhoCodigo}]]*/ null;
+    </script>
     <!-- ========== SCRIPT PRINCIPAL ========== -->
     <script th:src="@{/js/calendario-responsavel.js}"></script>
 
 </body>
+
 </html>

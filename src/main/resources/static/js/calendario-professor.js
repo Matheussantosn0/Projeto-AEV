@@ -300,15 +300,39 @@ async function buscarAlunosDaTurma(codigo, nomeTurma) {
     lista.innerHTML = '<p style="padding:1rem;text-align:center;">Carregando...</p>';
 
     try {
-        const response = await fetch(`/agendaescolar/professor/alunos-turma?codigo=${codigo}`);
-        if (!response.ok) throw new Error('Erro ao buscar alunos');
+        const [resAlunos, resAvisos] = await Promise.all([
+            fetch(`/agendaescolar/professor/alunos-turma?codigo=${codigo}`),
+            fetch(`/agendaescolar/professor/avisos-turma?turmaId=${codigo}`)
+        ]);
 
-        const alunos = await response.json();
-        estado.turmaSelecionada = { id: codigo, nome: nomeTurma }; // ← salva turma selecionada
+        const alunos = await resAlunos.json();
+        const avisos = resAvisos.ok ? await resAvisos.json() : [];
+
+        estado.turmaSelecionada = { id: codigo, nome: nomeTurma };
+
+        // Injeta avisos do banco no calendário
+        avisos.forEach(aviso => {
+            const dataStr = aviso.dataEvento; // formato YYYY-MM-DD
+            if (!estado.eventos[dataStr]) estado.eventos[dataStr] = [];
+            // evita duplicata
+            if (!estado.eventos[dataStr].find(e => e.id === aviso.id)) {
+                estado.eventos[dataStr].push({
+                    id: aviso.id,
+                    tipo: 'aviso',
+                    titulo: aviso.titulo,
+                    hora: '08:00',
+                    conteudo: aviso.conteudo,
+                    turma: nomeTurma,
+                    _fromBackend: true
+                });
+            }
+        });
+
+        renderizarCalendario();
         renderizarAlunos(alunos, nomeTurma);
 
     } catch (error) {
-        lista.innerHTML = '<p style="padding:1rem;text-align:center;">Erro ao carregar alunos.</p>';
+        lista.innerHTML = '<p style="padding:1rem;text-align:center;">Erro ao carregar dados.</p>';
     }
 }
 
@@ -587,22 +611,33 @@ async function adicionarItemAgenda() {
     exibirToast(`✅ ${CONFIG.tiposEvento[tipo]?.label || 'Item'} adicionado!`, 'success');
 }
 
-function removerEvento(dataStr, itemId, tipo) {
+async function removerEvento(dataStr, itemId, tipo) {
     const collection = tipo === 'aula' ? estado.aulas : estado.eventos;
-
     if (!collection[dataStr]) return;
 
-    collection[dataStr] = collection[dataStr].filter(item => item.id != itemId);
+    const item = collection[dataStr].find(i => i.id == itemId);
 
+    // Se for aviso do backend, deleta no servidor
+    if (item && item._fromBackend) {
+        try {
+            const res = await fetch(`/agendaescolar/professor/excluir-aviso/${itemId}`, { method: 'POST' });
+            if (!res.ok) {
+                exibirToast('❌ Erro ao excluir aviso.', 'error');
+                return;
+            }
+        } catch (e) {
+            exibirToast('❌ Erro ao excluir aviso.', 'error');
+            return;
+        }
+    }
+
+    collection[dataStr] = collection[dataStr].filter(i => i.id != itemId);
     if (collection[dataStr].length === 0) delete collection[dataStr];
 
     salvarDados();
 
-    if (tipo === 'aula') {
-        renderizarAulasDoDia(dataStr);
-    } else {
-        renderizarEventosDoDia(dataStr);
-    }
+    if (tipo === 'aula') renderizarAulasDoDia(dataStr);
+    else renderizarEventosDoDia(dataStr);
 
     renderizarCalendario();
     exibirToast('🗑️ Item removido da agenda', 'info');
